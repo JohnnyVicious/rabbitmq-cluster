@@ -6,8 +6,6 @@ LABEL image="rabbitmq:management"
 #WORKDIR /rabbitmq/
 #RUN apk add --no-cache procps # Refer https://github.com/docker-library/rabbitmq/issues/162
 
-RUN addgroup -S rabbitmq && adduser -S -H rabbitmq -G rabbitmq
-
 ADD rabbitmq.conf /etc/rabbitmq/
 ADD erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 
@@ -15,15 +13,17 @@ ADD erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 ADD startrabbit.sh /opt/rabbitmq/
 
 #Provide necessary permissions to config files
-# Do we need to add user
 RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie \
 && chmod 400 /var/lib/rabbitmq/.erlang.cookie \
 && mkdir -p /opt/rabbitmq \
 && chmod a+x /opt/rabbitmq/startrabbit.sh
 
-RUN rabbitmq-plugins list <<< "y"
-RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_management rabbitmq_management_agent rabbitmq_federation rabbitmq_federation_management <<< "y"
+RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management <<< "y" \
+&& apt-get update; \
+&& apt-get install -y --no-install-recommends python3; \
+&& rm -rf /var/lib/apt/lists/*; \
+&& rabbitmqadmin --version
 
 # 5672  - Used by AMQP 0-9-1 and 1.0 clients with and without TLS
 # 15672 - HTTP API clients, Management UI & rabbitmqadmin
