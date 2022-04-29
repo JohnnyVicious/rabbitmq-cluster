@@ -20,11 +20,11 @@ RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && chmod a+x /opt/rabbitmq/startrabbit.sh
 
 RUN set eux; \
-rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management; \
-&& apt-get update; \
-&& apt-get install -y --no-install-recommends python3; \
-&& rm -rf /var/lib/apt/lists/*; \
-&& rabbitmqadmin --version
+  rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management; \
+  apt-get update; \
+  apt-get install -y --no-install-recommends python3; \
+  rm -rf /var/lib/apt/lists/*; \
+  rabbitmqadmin --version
 
 # 5672  - Used by AMQP 0-9-1 and 1.0 clients with and without TLS
 # 15672 - HTTP API clients, Management UI & rabbitmqadmin
