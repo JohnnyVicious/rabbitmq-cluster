@@ -22,6 +22,9 @@ RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && mkdir -p /opt/rabbit \
 && chmod a+x /opt/rabbit/startrabbit.sh
 
+RUN rabbitmq-plugins list <<< "y"
+RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_management rabbitmq_management_agent rabbitmq_federation rabbitmq_federation_management <<< "y"
+
 # 5672  - Used by AMQP 0-9-1 and 1.0 clients with and without TLS
 # 15672 - HTTP API clients, Management UI & rabbitmqadmin
 # 25672 - Used for inter-node & CLI tools communication (Erlang distribution server port), computed as AMQP default port (5672) + 20000
