@@ -4,20 +4,19 @@ LABEL MAINTAINER="JohnnyVicious"
 LABEL image="rabbitmq:management"
 
 #WORKDIR /rabbitmq/
-#RUN apk add --no-cache procps # Refer https://github.com/docker-library/rabbitmq/issues/162
 
 ADD rabbitmq.conf /etc/rabbitmq/
 ADD erlang.cookie /var/lib/rabbitmq/.erlang.cookie
 
-#Add startup script in /opt/rabbitmq
-ADD startrabbit.sh /opt/rabbitmq/
+#Add startup script in /opt/rabbit
+ADD startrabbit.sh /opt/rabbit/
 
 #Provide necessary permissions to config files
 RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie \
 && chmod 400 /var/lib/rabbitmq/.erlang.cookie \
-&& mkdir -p /opt/rabbitmq \
-&& chmod a+x /opt/rabbitmq/startrabbit.sh
+&& mkdir -p /opt/rabbit \
+&& chmod a+x /opt/rabbit/startrabbit.sh
 
 RUN set eux; \
   rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management; \
@@ -42,4 +41,4 @@ EXPOSE 5672 \
 9103 \
 9104
 
-CMD /opt/rabbitmq/startrabbit.sh
+CMD /opt/rabbit/startrabbit.sh
