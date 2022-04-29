@@ -19,7 +19,8 @@ RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && mkdir -p /opt/rabbitmq \
 && chmod a+x /opt/rabbitmq/startrabbit.sh
 
-RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management <<< "y" \
+RUN set eux; \
+rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management; \
 && apt-get update; \
 && apt-get install -y --no-install-recommends python3; \
 && rm -rf /var/lib/apt/lists/*; \
