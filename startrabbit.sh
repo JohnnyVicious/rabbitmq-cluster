@@ -5,7 +5,7 @@
 . ~/.bashrc
 
 HOSTNAME=`env hostname`
-RABBIT_BASEDIR="/rabbitmq/rabbitmq_server-3.7.17"
+RABBIT_BASEDIR=""
 echo "HOSTNAME " $HOSTNAME
 echo "RABBIT_BASEDIR " $RABBIT_BASEDIR
 echo ""
