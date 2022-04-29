@@ -5,7 +5,6 @@
 . ~/.bashrc
 
 HOSTNAME=`env hostname`
-RABBIT_BASEDIR=""
 echo "HOSTNAME " $HOSTNAME
 echo "RABBIT_BASEDIR " $RABBIT_BASEDIR
 echo ""
@@ -27,19 +26,19 @@ change_default_user() {
 if [ -z "$CLUSTERED" ]; then
     # If not clustered then start it normally as standalone server
     rabbitmq-server &
-    rabbitmqctl wait $RABBIT_BASEDIR/var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
+    rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
     change_default_user
-    tail -f $RABBIT_BASEDIR/var/log/rabbitmq/rabbit\@$HOSTNAME.log
+    tail -f /var/log/rabbitmq/rabbit\@$HOSTNAME.log
 else
     if [ -z "$CLUSTER_WITH" ]; then
         # If clustered, but cluster with is not specified then again start normally, could be the first server in the cluster
         rabbitmq-server &
         sleep 5
-        rabbitmqctl wait $RABBIT_BASEDIR/var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
-        tail -f $RABBIT_BASEDIR/var/log/rabbitmq/rabbit\@$HOSTNAME.log
+        rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
+        tail -f /var/log/rabbitmq/rabbit\@$HOSTNAME.log
     else
       rabbitmq-server -detached
-      rabbitmqctl wait $RABBIT_BASEDIR/var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
+      rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
       rabbitmqctl stop_app
       if [ -z "$RAM_NODE" ]; then
           rabbitmqctl join_cluster rabbit@$CLUSTER_WITH
@@ -49,6 +48,6 @@ else
       rabbitmqctl start_app
 
       #tail to keep foreground process active ...
-      tail -f $RABBIT_BASEDIR/var/log/rabbitmq/*.log
+      tail -f /var/log/rabbitmq/*.log
     fi
 fi
