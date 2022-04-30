@@ -1,8 +1,39 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Bash script for booting Rabbits with defined configuration
-# All the ports are exposed on host system
-# . ~/.bashrc
+set -euo pipefail
+
+deprecatedEnvVars=(
+	RABBITMQ_DEFAULT_PASS_FILE
+	RABBITMQ_DEFAULT_USER_FILE
+	RABBITMQ_MANAGEMENT_SSL_CACERTFILE
+	RABBITMQ_MANAGEMENT_SSL_CERTFILE
+	RABBITMQ_MANAGEMENT_SSL_DEPTH
+	RABBITMQ_MANAGEMENT_SSL_FAIL_IF_NO_PEER_CERT
+	RABBITMQ_MANAGEMENT_SSL_KEYFILE
+	RABBITMQ_MANAGEMENT_SSL_VERIFY
+	RABBITMQ_SSL_CACERTFILE
+	RABBITMQ_SSL_CERTFILE
+	RABBITMQ_SSL_DEPTH
+	RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT
+	RABBITMQ_SSL_KEYFILE
+	RABBITMQ_SSL_VERIFY
+	RABBITMQ_VM_MEMORY_HIGH_WATERMARK
+)
+hasOldEnv=
+for old in "${deprecatedEnvVars[@]}"; do
+	if [ -n "${!old:-}" ]; then
+		echo >&2 "error: $old is set but deprecated"
+		hasOldEnv=1
+	fi
+done
+if [ -n "$hasOldEnv" ]; then
+	echo >&2 'error: deprecated environment variables detected'
+	echo >&2
+	echo >&2 'Please use a configuration file instead; visit https://www.rabbitmq.com/configure.html to learn more'
+	echo >&2
+	exit 1
+fi
+
 
 HOSTNAME=`env hostname`
 echo "HOSTNAME " $HOSTNAME
@@ -40,15 +71,13 @@ else
       rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
       rabbitmqctl stop_app
       if [ -z "$RAM_NODE" ]; then
-          # rabbitmqctl forget_cluster_node rabbit@$HOSTNAME
           rabbitmqctl join_cluster rabbit@$CLUSTER_WITH
       else
-          # rabbitmqctl forget_cluster_node rabbit@$HOSTNAME
           rabbitmqctl join_cluster --ram rabbit@$CLUSTER_WITH
       fi
       rabbitmqctl start_app
 
       #tail to keep foreground process active ...
-      tail -f /var/log/rabbitmq/*.log
+      tail -f /var/log/rabbitmq/rabbit\@$HOSTNAME*.log
     fi
 fi
