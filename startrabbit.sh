@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+#set -euo pipefail
 
 deprecatedEnvVars=(
 	RABBITMQ_DEFAULT_PASS_FILE
