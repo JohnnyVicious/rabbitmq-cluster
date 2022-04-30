@@ -40,10 +40,10 @@ else
       rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit\@$HOSTNAME.pid
       rabbitmqctl stop_app
       if [ -z "$RAM_NODE" ]; then
-          rabbitmqctl forget_cluster_node rabbit@$CLUSTER_WITH
+          # rabbitmqctl forget_cluster_node rabbit@$HOSTNAME
           rabbitmqctl join_cluster rabbit@$CLUSTER_WITH
       else
-          rabbitmqctl forget_cluster_node rabbit@$CLUSTER_WITH
+          # rabbitmqctl forget_cluster_node rabbit@$HOSTNAME
           rabbitmqctl join_cluster --ram rabbit@$CLUSTER_WITH
       fi
       rabbitmqctl start_app
