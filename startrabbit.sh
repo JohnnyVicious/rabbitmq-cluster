@@ -40,7 +40,7 @@ echo "HOSTNAME " $HOSTNAME
 echo ""
 echo ""
 echo "Starting RabbitMQ Server For host: " $HOSTNAME
-hostname -f
+resolvectl status
 change_default_user() {
   # change default user only if ENV is provided
   if [ -z $RABBITMQ_DEFAULT_USER ] && [ -z $RABBITMQ_DEFAULT_PASS ]; then
