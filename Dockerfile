@@ -19,7 +19,7 @@ RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && chmod a+x /opt/rabbit/startrabbit.sh
 
 RUN set eux; \
-  rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management; \
+  rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management rabbitmq_shovel rabbitmq_shovel_management; \
   apt-get update; \
   apt-get install -y --no-install-recommends python3; \
   rm -rf /var/lib/apt/lists/*; \
