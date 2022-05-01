@@ -18,8 +18,9 @@ RUN chmod u+rw /etc/rabbitmq/rabbitmq.conf \
 && mkdir -p /opt/rabbit \
 && chmod a+x /opt/rabbit/startrabbit.sh
 
+#rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management rabbitmq_shovel rabbitmq_shovel_management
 RUN set eux; \
-  rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_federation rabbitmq_federation_management rabbitmq_shovel rabbitmq_shovel_management; \
+  #rabbitmq-plugins enable --offline rabbitmq_mqtt; \
   apt-get update; \
   apt-get install -y --no-install-recommends python3; \
   rm -rf /var/lib/apt/lists/*; \
